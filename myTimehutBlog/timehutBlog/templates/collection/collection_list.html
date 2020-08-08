@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load blog_tags %}
+
+{% block title %} My Blog {% endblock %}
+
+{% block content %}
+    <h1>My Blog</h1>
+
+    {% for collection in collections %}
+        <h2>
+            <a href="{{ collection.get_absolute_url }}">
+                {% ifequal collection.baby_id '537413380' %}
+                    安安
+                {% endifequal %}
+                {% ifequal collection.baby_id '537776076' %}
+                    安柔
+                {% endifequal %}
+                 - {{ collection.months }} months | {{ collection.days }} days
+            </a>
+        </h2>
+        <p class="date">
+            Published {{ collection.created_at }}, Updated {{ collection.updated_at }}
+        </p>
+        {{ collection.caption | truncatewords:30 | linebreaks }}
+        <img src="{% get_thumbnail_by_collection_id collection.id %}" width="300">
+    {% endfor %}
+
+    {% include "pagination.html" with page=collections %}
+    <!-- If using ListView class, then page = 'page_obj' -->
+{% endblock %}

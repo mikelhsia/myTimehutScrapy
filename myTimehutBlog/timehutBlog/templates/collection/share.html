@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %} Share a collection {% endblock %}
+
+{% block content %}
+    {% if sent %}
+        <h1>E-mail Successfully sent</h1>
+        <p>
+            " {% ifequal collection.baby_id '537413380' %} 安安 {% endifequal %}
+            {% ifequal collection.baby_id '537776076' %} 安柔 {% endifequal %}
+            - {{ collection.months }} months | {{ collection.days }} days " was successfully sent to {{ cd.to }}.
+        </p>
+    {% else %}
+        <h1>Share " {% ifequal collection.baby_id '537413380' %} 安安 {% endifequal %}
+                    {% ifequal collection.baby_id '537776076' %} 安柔 {% endifequal %}
+                    - {{ collection.months }} months | {{ collection.days }} days " by e-mail
+        </h1>
+        <form action="." method="post">
+            <!--
+                We tell Django to render its fields in HTML paragraph <p> elements with the as_p method.
+                We can also render the form as an unordered list with as_ul or as a HTML table with as_table.
+                or use below to iterate each field
+                { % for field in form % }
+                    <div>
+                        { { field.errors } }
+                        { { field.label_tag } } { { field } }
+                    </div>
+                { % endfor % }
+            -->
+            {{ form.as_p }}
+            <!-- Avoid CSRF attack-->
+            {% csrf_token %}
+            <input type="submit" value="Send e-mail">
+        </form>
+    {% endif %}
+{% endblock %}

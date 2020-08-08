@@ -1,0 +1,15 @@
+<ul>
+    {% for collection in latest_collections %}
+    <li>
+        <a href="{{ collection.get_absolute_url }}">
+            {% ifequal collection.baby_id '537413380' %}
+            安安
+            {% endifequal %}
+            {% ifequal collection.baby_id '537776076' %}
+            安柔
+            {% endifequal %}
+            - {{ collection.months }} months | {{ collection.days }} days
+        </a>
+        {% endfor %}
+    </li>
+</ul>

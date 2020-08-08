@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load blog_tags %}
+
+{% block title %} {{ collection.slug }} {% endblock %}
+
+{% block content %}
+    <h1>
+        {% ifequal collection.baby_id '537413380' %}
+        安安
+        {% endifequal %}
+        {% ifequal collection.baby_id '537776076' %}
+        安柔
+        {% endifequal %}
+        - {{ collection.months }} months | {{ collection.days }} days
+    </h1>
+    <p class="date">
+        Published {{collection.created_at}} | Updated {{collection.updated_at}}
+    </p>
+    {{ collection.caption | linebreaks }}
+
+    <p>
+        <!--
+            Remember that we are building the URL dynamically using the % url % template tag provided by Django.
+            We are using the namespace called blog and the URL named collection_share, and we are passing the
+            collection ID as parameter to build the absolute URL.
+        -->
+        <a href="{% url 'timehutBlog:collection_share' collection.id %}">
+            Share this post
+        </a>
+    </p>
+
+    <div>
+        {% for moment in moment_list %}
+            {% ifequal moment.content_type 3 %}
+                <img width="20%" src="{{ moment.src_url }}" alt="{{ moment.content }}">
+            {% endifequal %}
+        {% endfor %}
+    </div>
+    <div>
+        {% with comments.count as total_comments %}
+            <h2>
+                {{ total_comments }} comment{{ total_comments|pluralize }}
+            </h2>
+        {% endwith %}
+    </div>
+    <div>
+        {% for comment in comments %}
+            <div class="comment">
+                <p class="info">
+                    Comment {{ forloop.counter }} by {{ comment.name }}
+                    {{ comment.created_at }}
+                </p>
+                {{ comment.body|markdown }}
+            </div>
+        {% empty %}
+            <p>There are no comments yet.</p>
+        {% endfor %}
+    </div>
+    <div>
+        {% if new_comment %}
+            <h2>Your comment has been added.</h2>
+        {% else %}
+            <h2>Add a new comment</h2>
+            <form action="." method="post">
+                {{ comment_form.as_p }}
+                {% csrf_token %}
+                <p><input type="submit" value="Add comment"></p>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

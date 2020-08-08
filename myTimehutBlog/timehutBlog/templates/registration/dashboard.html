@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+
+    {% with total_images_created=request.user.images_created.count %}
+        <p>Welcome to your dashboard. You have bookmarked {{ total_images_created }} image{{ total_images_created | pluralize }}.</p>
+    {% endwith %}
+
+    <p>Drag the following button to your bookmarks toolbar to bookmark images from other website ->
+        <!--
+        Check whether myBookmarklet variable is defined, avoiding loading it again if the user clicks on the bookmarklet repeatedly.
+        And using a random number as parameter to prevent loading the file from the browser's cache
+        Actual bookmarklet code will reside in the bookmarklet.js static file. This will allow us to update our bookmarklet code
+        without requiring our users to update the bookmark they previously added to their browser
+        -->
+        <a href="javascript:{% include 'bookmarklet_launcher.js' %}" class="button">Bookmark it</a>
+    </p>
+
+    <p>
+        You can <a href="{% url 'timehutBlog:edit' %}">edit your profile</a> or <a href="{% url 'timehutBlog:password_change' %}">change your password</a>.
+    </p>
+
+    <h2>What's happening</h2>
+    <div class="action-list">
+        {% for action in actions %}
+            {% include "actions/action/detail.html" %}
+        {% endfor %}
+    </div>
+{% endblock %}
